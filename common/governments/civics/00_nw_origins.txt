@@ -1,6 +1,7 @@
 # Nomadic Wilderness: The Uprooted
-# Origin definition. Fields marked <<VANILLA>> must be copied from origin_voidfarers
-# in vanilla common/governments/civics/00_origins.txt (see docs/04-vanilla-hooks.md H1).
+# Origin definition. Vanilla references (install v4.5.2, see docs/research/install-audit-4.5.2.md):
+#   Voidfarers is origin_default_nomads (common/governments/civics/00_origins.txt:57-93).
+#   Wilderness is origin_wilderness (common/governments/civics/00_origins.txt:591-662).
 
 origin_nw_uprooted = {
 	is_origin = yes
@@ -13,41 +14,89 @@ origin_nw_uprooted = {
 	}
 
 	possible = {
+		# Nomadic status is the empire designer's Nomadic toggle, not an origin field.
+		# Voidfarers only filters on it (00_origins.txt:73-75); so do we.
+		is_nomadic = yes
 		authority = { value = auth_hive_mind }
+		# Bioship shipsets give country_uses_bio_ships (graphical_culture/00_graphical_culture.txt:1434-1439,1501-1535),
+		# which switches Logistic Ships, Waystations and Arkship construction to food costs.
+		# Copied from origin_wilderness (00_origins.txt:610-616).
+		graphical_culture = {
+			OR = {
+				text = graphical_culture_tooltip_biological
+				value = biogenesis_01
+				value = biogenesis_02
+			}
+		}
 		civics = {
-			NOT = { value = civic_hive_devouring_swarm }
-			NOT = { value = civic_hive_terravore }
+			NOT = { value = civic_hive_devouring_swarm }	# Terravore is the lithoid form of this civic (02_gestalt_civics.txt:355)
+			# Civics origin_wilderness excludes (00_origins.txt:617-633)
+			NOR = {
+				value = civic_hive_catalytic_processing
+				value = civic_hive_toxic_baths
+				value = civic_hive_memorialist
+				value = civic_hive_guided_sapience
+				value = civic_astrometeorology_hive
+				value = civic_environmental_architects_hive
+				value = civic_entropy_drinkers_hive_mind
+				value = civic_hive_superstitious_beliefs
+				value = civic_twisted_experimenters_hive_mind
+				value = civic_hive_chosen
+				value = civic_hive_world_forgers
+				value = civic_hive_scorched_earth
+				value = civic_hive_galvanic_symbiosis
+			}
+		}
+		# Volcanic worlds use their own district set (00_origins.txt:634-639); matters for Take Root.
+		preferred_planet_class = {
+			NOT = {
+				text = does_not_have_volcanic_homeworld
+				value = pc_volcanic
+			}
 		}
 	}
 
 	# --- Nomadic empire fields -------------------------------------------------
-	# <<VANILLA: paste every field that origin_voidfarers has and origin_default
-	#   lacks. Expected to include the nomadic marker, the starting Arkship
-	#   selection, and the starting-ship overrides (Logistic Ship instead of
-	#   Construction Ship). Keep them verbatim, then apply the three edits below.>>
-	#   Edit 1: starting Arkship class -> arkship_nw_heartwood_1 (swapped by event nw_uprooted.2)
-	#   Edit 2: starting construction ship -> nw_seedwing
-	#   Edit 3: starting science ship -> nw_seedwing_scout
+	# There are none to copy. origin_default_nomads has no nomadic marker, no
+	# starting-Arkship field and no starting-ship override (00_origins.txt:57-93).
+	#   Starting Arkship: chosen in the empire designer (prescripted ship_size,
+	#     prescripted_countries/default.txt:23) and created by the engine. The designer's
+	#     class is the Ark's class (decision D3-B); nw_uprooted.2 applies the class trait.
+	#   Starting Logistic Ship and science ship: created by game_start.9
+	#     (events/game_start.txt:1316-1353, :1137-1168) from vanilla designs.
+	#     Seedwing art is planned in docs/research/plan-missing-scripts.md.
 	# ---------------------------------------------------------------------------
 
-	# No starting_colony: the empire has no homeworld. The initializer places the Rootscar and the Ark.
+	# No starting_colony: the empire has no homeworld. The initializer places the Rootscar.
+	# No starting war fleet either (decision D12): like every vanilla nomad, the Ark is the warship
+	# (events/game_start.txt:1471-1476).
 	initializers = { nw_uprooted_home_system }
 
 	flags = {
 		nw_uprooted
 		custom_start_screen
+		# From origin_wilderness (00_origins.txt:645-649). uses_biomass enables the biomass
+		# monthly on_action (common/defines/00_defines.txt:1218); virtual_jobs is VIRTUAL_JOBS_FLAG (:1548).
+		uses_biomass
+		virtual_jobs
 	}
 
 	modifier = {
 		# The whole empire is one organism that remembers its tree.
 		country_unity_produces_mult = 0.05
-		planet_jobs_biomass_produces_mult = 0.10   # <<VANILLA: confirm biomass modifier name>>
+		# D4: biomass is the Wilderness pop count (events/origin_events_wilderness.txt:40-55), so "+10% biomass"
+		# is pop growth. logistic_growth_mult appears in vanilla civic modifiers (02_gestalt_civics.txt:1231-1234).
+		logistic_growth_mult = 0.10   # design value, balance pending
+	}
+
+	# From origin_wilderness (00_origins.txt:659-661). Biomass counts pops with this trait.
+	traits = {
+		trait = trait_wilderness
 	}
 
 	random_weight = {
 		base = 0   # kept out of random-empire generation until the AI is tuned (docs/02 §12)
 	}
 
-	has_secondary_species = no
 	advanced_start = no
 }

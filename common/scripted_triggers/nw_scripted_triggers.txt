@@ -1,6 +1,7 @@
-# Identity triggers for the mod. Everything else in the mod gates on these,
-# so a Plan B switch (docs/04 H2) only touches this file.
+# Identity triggers for the mod. Everything else in the mod gates on these.
 
+# The flag branch keeps the mod's content on after Take Root, when the empire's origin becomes
+# origin_wilderness (decision D7-W); nw_uprooted.100 sets the flag explicitly (plan P19).
 nw_is_uprooted_empire = {
 	OR = {
 		has_origin = origin_nw_uprooted
@@ -8,13 +9,13 @@ nw_is_uprooted_empire = {
 	}
 }
 
-# True for a colony that lives on one of our Tree Arks.
+# Colony scope. True for a colony that lives on one of our Tree Arks.
+# Vanilla tests an Arkship colony with is_planet_class = pc_ark
+# (common/planet_classes/06_planet_classes_nomads.txt:1; e.g. inline_scripts/megastructures/arkship.txt:69).
 nw_is_tree_ark_colony = {
 	exists = owner
 	owner = { nw_is_uprooted_empire = yes }
-	# <<VANILLA: replace with the real Arkship colony test, e.g. is_planet_class = pc_arkship
-	#   or the scripted trigger vanilla uses for Arkship colonies (docs/04 H3, H5)>>
-	has_planet_flag = nw_tree_ark
+	is_planet_class = pc_ark
 }
 
 nw_ark_has_heartwood = {

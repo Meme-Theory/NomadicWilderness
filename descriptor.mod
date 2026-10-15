@@ -6,4 +6,4 @@ tags={
 	"Species"
 }
 name="Nomadic Wilderness: The Uprooted"
-supported_version="4.4.*"
+supported_version="4.5.*"

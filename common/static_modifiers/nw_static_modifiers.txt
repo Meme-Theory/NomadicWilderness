@@ -1,22 +1,30 @@
-# All colony-scope modifiers. 4.4.4 applies planet-class modifiers to Arkship colonies;
-# docs/04 §7 notes these must target colonies rather than planets. Verify scope name.
+# Static modifiers for Ark colonies (colony scope; added with add_modifier on the colony, as vanilla
+# does for Arkship modifiers, e.g. events/nomads_arkship_events.txt:8390). planet_* keys apply to the
+# colony and ship_* keys reach the carrier Ark (situation stage example: common/situations/14_nomads_situations.txt:1347-1354).
+# 4.4.4 note: "Any scripted modifier needs to be updated to work on colonies rather than planets."
+#
+# Biomass (decision D4): biomass is the Wilderness pop count, reset monthly (events/origin_events_wilderness.txt:40-55),
+# so there is no biomass output modifier. Biomass income is pop growth: the former biomass bonuses below are
+# logistic_growth_mult, the vanilla pop growth key (also used in civic modifiers, common/governments/civics/02_gestalt_civics.txt:1231-1234,
+# and static modifiers, common/static_modifiers/18_static_modifiers_first_contact_dlc.txt:417).
+# Their values are design values, balance pending; they are not an equivalence to the old biomass numbers.
 
 nw_withered_heartwood = {
 	icon = "gfx/interface/icons/modifiers/mod_nw_withered_heartwood.dds"
 	icon_frame = 3
-	# Mirrors vanilla Lost Tree of Life (values to be copied from vanilla, docs/04 H11).
+	# Mirrors vanilla no_lifetree (common/static_modifiers/11_static_modifiers_federations.txt:331-338).
 	planet_building_build_speed_mult = -0.50
 	planet_jobs_produces_mult = -0.25
 	planet_jobs_upkeep_mult = 0.10
 	planet_stability_add = -5
-	planet_jobs_biomass_produces_mult = -0.50   # <<VANILLA: confirm biomass modifier name>>
+	logistic_growth_mult = -0.50   # D4: "biomass income halved on that Ark". Design value, balance pending.
 }
 
 nw_fruiting = {
 	icon = "gfx/interface/icons/modifiers/mod_nw_fruiting.dds"
 	icon_frame = 1
-	# Heartwood Ark trait. The 10% biomass credit on harvest is applied by effect; this is the tooltip carrier.
-	planet_jobs_biomass_produces_mult = 0.05   # <<VANILLA: confirm biomass modifier name>>
+	# Heartwood Ark trait. The harvest credit is new pops, applied by an event (plan-missing-scripts.md P15).
+	logistic_growth_mult = 0.05   # D4: design value, balance pending
 }
 
 nw_living_hull = {
@@ -30,7 +38,8 @@ nw_spore_survey = {
 	icon = "gfx/interface/icons/modifiers/mod_nw_spore_survey.dds"
 	icon_frame = 1
 	# Lumen Ark trait. Survey behaviour is granted on the ship size.
-	planet_jobs_research_produces_mult = 0.02   # <<VANILLA: confirm research modifier name in 4.x (may be planet_researchers_produces_mult)>>
+	# Researcher output key as used by Wilderness colony types (common/colony_types/03_wilderness_colony_types.txt:250).
+	planet_researchers_produces_mult = 0.02
 }
 
 nw_nurture_forced_bloom = {
@@ -49,11 +58,23 @@ nw_nurture_dormancy = {
 nw_memory_of_the_grove = {
 	icon = "gfx/interface/icons/modifiers/mod_nw_memory.dds"
 	icon_frame = 1
-	# Country modifier from nw_uprooted.30 if the player leaves the dormant sapling.
-	planet_jobs_biomass_produces_mult = 0.05   # <<VANILLA: confirm biomass modifier name>>
+	# Country modifier from nw_uprooted.30 if the player leaves the dormant sapling: "+5% biomass from pop growth".
+	logistic_growth_mult = 0.05   # D4: design value, balance pending
 }
 
-# Aliases so nw_swap_starting_ark can address a trait by class name.
-nw_heartwood_trait = { icon = "gfx/interface/icons/modifiers/mod_nw_fruiting.dds"      icon_frame = 1 planet_jobs_biomass_produces_mult = 0.05 }
-nw_lumen_trait     = { icon = "gfx/interface/icons/modifiers/mod_nw_spore_survey.dds" icon_frame = 1 planet_jobs_research_produces_mult = 0.02 }
-nw_thornwood_trait = { icon = "gfx/interface/icons/modifiers/mod_nw_living_hull.dds"  icon_frame = 1 planet_stability_add = 2 }
+# Class traits by class name, applied by nw_apply_starting_ark_class (nw_scripted_effects.txt).
+nw_heartwood_trait = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_fruiting.dds"
+	icon_frame = 1
+	logistic_growth_mult = 0.05   # D4: design value, balance pending
+}
+nw_lumen_trait = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_spore_survey.dds"
+	icon_frame = 1
+	planet_researchers_produces_mult = 0.02
+}
+nw_thornwood_trait = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_living_hull.dds"
+	icon_frame = 1
+	planet_stability_add = 2
+}

@@ -1,7 +1,8 @@
-# Decisions on Ark colonies.
+# Decisions on Ark colonies. The decision scope is the colony; vanilla runs decisions on Ark
+# colonies the same way (common/decisions/15_nomads_dlc_decisions.txt:5-63).
 
 # Transplant Sapling: an intact Ark in the same system restores a withered one.
-# Cost mirrors the vanilla Tree of Life transplant (500 food, 180 days; docs/04 H11).
+# Cost mirrors vanilla decision_transplant_tree: 500 food, 180 days (common/decisions/06_federation_decisions.txt:5-36).
 decision_nw_transplant_sapling = {
 	owned_planets_only = yes
 	icon = decision_nw_transplant_sapling
@@ -17,11 +18,19 @@ decision_nw_transplant_sapling = {
 	allow = {
 		custom_tooltip = {
 			fail_text = "nw_requires_intact_ark_in_system"
-			solar_system = {
-				any_system_planet = {
-					nw_is_tree_ark_colony = yes
-					nw_ark_has_heartwood = yes
-					NOT = { is_same_value = root }
+			# Ark colonies ride on ships, so they are not system planets: look for our Ark fleets in the system
+			# (any_fleet_in_system: megastructures/30_nomad_waystation.txt:155; ship -> colony link:
+			# scripted_effects/01_start_of_game_effects.txt:5234; colony? null-safe: scripted_triggers/09_scripted_triggers_nomads.txt:341).
+			solar_system? = {
+				any_fleet_in_system = {
+					owner = { is_same_value = root.owner }
+					any_owned_ship = {
+						colony? = {
+							nw_is_tree_ark_colony = yes
+							nw_ark_has_heartwood = yes
+							NOT = { is_same_value = root }
+						}
+					}
 				}
 			}
 		}
@@ -42,16 +51,51 @@ decision_nw_transplant_sapling = {
 }
 
 # Take Root: the last Elder Ark becomes a planet's heart. See docs/02 §10.
+# Superseded by decision D7-A (reuse the vanilla arkship_settle action): retire this decision in
+# docs/research/plan-missing-scripts.md P19. Kept until then.
 decision_nw_take_root = {
 	owned_planets_only = yes
 	icon = decision_nw_take_root
 	enactment_time = 720
+	# Biomass is spendable in decision costs (common/decisions/14_wilderness_decisions.txt:19-28), but it only
+	# stays spent if on_queued kills that many Wilderness pops; on_queued/on_unqueued are copied verbatim
+	# from vanilla decision_wilderness_expand (14_wilderness_decisions.txt:34-64).
 	resources = {
 		category = decisions
 		cost = {
-			biomass = 3000   # <<VANILLA: confirm biomass spendable in decisions (docs/04 H13)>>
+			biomass = 3000
 			food = 1000
 		}
+	}
+	on_queued = {
+		if = { # kill on the same planet
+			limit = {
+				is_variable_set = local_spent_biomass
+				any_owned_pop_group = {
+					has_trait = trait_wilderness
+					pop_group_size > local_spent_biomass
+				}
+			}
+			random_owned_pop_group = {
+				limit = {
+					has_trait = trait_wilderness
+					pop_group_size > local_spent_biomass
+				}
+				kill_pop_group = {
+					pop_group = this
+					amount = local_spent_biomass
+				}
+			}
+		}
+		else_if = {
+			limit = { is_variable_set = local_spent_biomass }
+			owner = {
+				global_biomass_spender = yes
+			}
+		}
+	}
+	on_unqueued = {
+		unqueue_biomass_effect = yes
 	}
 	potential = {
 		nw_is_tree_ark_colony = yes
@@ -60,11 +104,13 @@ decision_nw_take_root = {
 	allow = {
 		custom_tooltip = {
 			fail_text = "nw_take_root_last_ark_only"
-			owner = { count_owned_planet = { limit = { nw_is_tree_ark_colony = yes } count = 1 } }
+			# Ark colonies are colonies, not planets (vanilla iterates them with *_owned_colony,
+			# events/nomads_arkship_events.txt:5005-5008); count syntax: common/pop_faction_types/00_xenoist.txt:743-748.
+			owner = { count_owned_colony = { limit = { nw_is_tree_ark_colony = yes } count = 1 } }
 		}
 		custom_tooltip = {
 			fail_text = "nw_take_root_needs_target"
-			solar_system = {
+			solar_system? = {
 				any_system_planet = {
 					is_planet_class = pc_barren
 					NOT = { exists = owner }
@@ -74,7 +120,7 @@ decision_nw_take_root = {
 	}
 	effect = {
 		owner = { set_country_flag = nw_take_root_pending }
-		solar_system = {
+		solar_system? = {
 			random_system_planet = {
 				limit = {
 					is_planet_class = pc_barren

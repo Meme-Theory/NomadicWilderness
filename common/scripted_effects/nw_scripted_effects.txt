@@ -1,6 +1,8 @@
 # Scripted effects. Scope noted on each.
+# Ark colonies are colony scope (carried by a ship); vanilla iterates them with
+# *_owned_colony + is_planet_class = pc_ark (events/nomads_arkship_events.txt:5005-5008).
 
-# planet scope (an Ark colony). Gives the Ark its Tree of Life.
+# colony scope (an Ark colony). Gives the Ark its Tree of Life.
 nw_plant_heartwood_core = {
 	remove_modifier = nw_withered_heartwood
 	if = {
@@ -9,7 +11,7 @@ nw_plant_heartwood_core = {
 	}
 }
 
-# planet scope. The tree dies back.
+# colony scope. The tree dies back.
 nw_wither_heartwood = {
 	remove_deposit = d_nw_heartwood_core
 	add_modifier = { modifier = nw_withered_heartwood }
@@ -22,21 +24,22 @@ nw_wither_heartwood = {
 	}
 }
 
-# planet scope. Hull threshold depends on class (Thornwood gets Living Hull).
+# colony scope. Hull threshold depends on class: 25%, or 12.5% for the Thornwood (Living Hull, decision D11).
+# has_hp_percentage is a ship-scope 0-1 fraction (events/cosmic_storms_events_1.txt:822);
+# ship? reaches a colony's carrier ship (events/game_start.txt:1792).
 nw_check_wither = {
 	if = {
 		limit = {
 			nw_ark_has_heartwood = yes
 			OR = {
+				has_planet_flag = nw_debug_force_wither	# test hook
 				AND = {
 					NOT = { has_planet_flag = nw_ark_thornwood }
-					# <<VANILLA: replace with the real hull-percent trigger on the Ark megastructure/ship, e.g.
-					#   from_megastructure / fleet = { any_owned_ship = { hull_percent < 0.25 } } (docs/04 H4)>>
-					has_planet_flag = nw_debug_force_wither
+					ship? = { has_hp_percentage < 0.25 }
 				}
 				AND = {
 					has_planet_flag = nw_ark_thornwood
-					has_planet_flag = nw_debug_force_wither   # <<VANILLA: hull_percent < 0.375>>
+					ship? = { has_hp_percentage < 0.125 }
 				}
 			}
 		}
@@ -44,7 +47,7 @@ nw_check_wither = {
 	}
 }
 
-# country scope. Marks a freshly spawned or upgraded Ark colony with class and tier flags.
+# colony scope. Marks a freshly spawned or upgraded Ark colony with class and tier flags.
 # Parameters: CLASS = heartwood|lumen|thornwood, TIER = 1|2|3
 nw_tag_ark = {
 	set_planet_flag = nw_tree_ark
@@ -58,18 +61,21 @@ nw_tag_ark = {
 	set_planet_flag = nw_ark_$CLASS$
 }
 
-# country scope. Replaces the starting Ark with the chosen class. Parameter: CLASS.
-# <<VANILLA: the megastructure swap effect depends on how vanilla spawns the starting Arkship (docs/04 H1).
-#   Expected shape: find the Ark megastructure, remove it, spawn arkship_nw_$CLASS$_1 in the same orbit,
-#   then move pops. Until then this only tags the existing Ark colony.>>
-nw_swap_starting_ark = {
-	every_owned_planet = {
-		limit = { has_planet_flag = nw_tree_ark }
-		nw_tag_ark = { CLASS = $CLASS$ TIER = 1 }
-		nw_plant_heartwood_core = yes
-		remove_modifier = nw_fruiting
-		remove_modifier = nw_spore_survey
-		remove_modifier = nw_living_hull
-		add_modifier = { modifier = nw_$CLASS$_trait }
+# country scope. Gives the starting Ark the class the player picked in the empire designer
+# (decision D3-B; called by nw_uprooted.2, which reads the starting_<class>_arkship flag).
+# Parameter: CLASS = heartwood|lumen|thornwood.
+# For nomads, capital_scope is the capital Ark colony (vanilla uses it so in
+# common/scripted_effects/01_start_of_game_effects.txt:5000-5002).
+nw_apply_starting_ark_class = {
+	capital_scope = {
+		if = {
+			limit = { nw_is_tree_ark_colony = yes }
+			nw_tag_ark = { CLASS = $CLASS$ TIER = 1 }
+			nw_plant_heartwood_core = yes
+			remove_modifier = nw_heartwood_trait
+			remove_modifier = nw_lumen_trait
+			remove_modifier = nw_thornwood_trait
+			add_modifier = { modifier = nw_$CLASS$_trait }
+		}
 	}
 }

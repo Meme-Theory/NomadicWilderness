@@ -1,13 +1,16 @@
 # TEMPLATE
-# Three tier-3 spinal mounts (docs/02 §3.1, docs/04 H7).
+# Obsolete under decision D8 (2026-10-15): the three spinal mounts are re-skins of vanilla starbase modules for
+# the Uprooted, with vanilla effects and techs and no class gates. No new component or module is planned.
+# Delete this file in plan-missing-scripts.md P14.
 #
-#   nw_spinal_taproot          copy of the Planetary Reprocessor mount; size_restriction -> nw_tree_heartwood_3;
-#                              prerequisites -> tech_nw_deep_taproot
-#   nw_spinal_heliotrope_crown copy of the vanilla Scientific tier-3 sensor mount if one exists, else a
-#                              utility component: sensor_range +2, hyperlane_range +2, plus a fleet aura
-#                              (ship_speed_mult 0.10, copied from a Starbase aura); size_restriction -> nw_tree_lumen_3;
-#                              prerequisites -> tech_nw_deep_taproot
-#   nw_spinal_heartlance       copy of the Devastator Mount; size_restriction -> nw_tree_thornwood_3;
-#                              prerequisites -> the vanilla Devastator Mount tech
-#
-# Keep the vanilla icon slots; the 2D set in docs/03 §6 supplies replacements.
+# The re-skinned vanilla modules (common/starbase_modules/00_arkship_spinal_modules.txt; spinal_mount_1 slot,
+# starbase_type = arkship):
+#   Taproot          = arkship_planetary_refinery       "Planetary Reprocessor"   :106-152 (enables arkship_reprocess_planet)
+#   Heliotrope Crown = arkship_system_scanner           "Subspace Imaging Array"  :197
+#   Heartlance       = arkship_spinal_devastator_mount  "Devastator Mount"        :4-43
+# How the re-skin works:
+#   - Models: the module sections' entities take the ship's graphical-culture prefix
+#     (spinal_module_super_refinery_01_entity -> civilian_arkship_spinal_module_super_refinery_01_entity,
+#     gfx/models/ships/other/_other_entities.asset:9949). The tree culture supplies its own (docs/03-arkship-models.md).
+#   - Names: the module names are static localisation (sm_arkship_planetary_refinery etc.); an Uprooted-only name
+#     needs scripted or triggered localisation (plan-missing-scripts.md P14).

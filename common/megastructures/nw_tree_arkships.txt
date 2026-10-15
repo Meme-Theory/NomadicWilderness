@@ -1,45 +1,23 @@
 # TEMPLATE
-# The nine Tree Arks (three classes x three tiers) plus the Seed stage.
-# Arkships are vanilla megastructures (docs/04 H4). This file cannot be written blind:
-# each block must be a copy of the matching vanilla Arkship block with the edits listed.
+# The Seed: the Uprooted's own new-Ark construction site (decision D6-A, 2026-10-15).
 #
-# Keys this mod expects (referenced by events, effects and localisation):
-#   arkship_nw_seed
-#   arkship_nw_heartwood_1  arkship_nw_heartwood_2  arkship_nw_heartwood_3
-#   arkship_nw_lumen_1      arkship_nw_lumen_2      arkship_nw_lumen_3
-#   arkship_nw_thornwood_1  arkship_nw_thornwood_2  arkship_nw_thornwood_3
+# Arkships are NOT megastructures (docs/research/install-audit-4.5.2.md H4):
+#   - An Ark is a ship whose size is starbase-class and carries a pc_ark colony:
+#       common/ship_sizes/29_nomads_dlc_ships.txt  civilian_arkship_tier_1 :104 ... military_arkship_tier_3 :1120
+#     Tiers are starbase levels (common/starbase_levels/06_arkship_levels.txt). Under decision D2-B the Uprooted
+#     keep these vanilla sizes; the tree look comes from a mod graphical culture (docs/03-arkship-models.md).
+#   - The only Arkship megastructures are the three construction sites that build a NEW Ark:
+#       civilian/science/military_arkship_megastructure (common/megastructures/29_nomad_arkships.txt:1,48,102),
+#       sharing common/inline_scripts/megastructures/arkship.txt (cost, potential, and on_build_complete ->
+#       create_arkship_effect in common/scripted_effects/nomads_effects.txt:6982-6997).
 #
-# Per-block edits from the vanilla source:
-#   1. key          -> as above
-#   2. entity       -> "nw_tree_<class>_0<tier>_entity" (seed: "nw_tree_seed_entity")
-#   3. potential    -> add  owner = { nw_is_uprooted_empire = yes }
-#   4. cost         -> seed stage: biomass = 2000, food = 1500, build_time = 720; remove alloys
-#                      tier upgrades: remove entirely, the Nurture situation performs the upgrade (docs/02 §3.3)
-#   5. upgrade_from -> previous tier key
-#   6. on_build / on_upgrade effect -> after the vanilla body add:
-#                      nw_tag_ark = { CLASS = <class> TIER = <tier> }
-#                      nw_plant_heartwood_core = yes        (tier 1 only)
-#                      add_modifier per class trait: nw_fruiting | nw_spore_survey | nw_living_hull (tier 1 only)
-#   7. keep every vanilla type bonus modifier (docs/04 H6) so balance matches Voidfarers.
-#
-# Example skeleton for one block. Replace the <<VANILLA>> lines with the real vanilla content.
+# What belongs here (plan-missing-scripts.md P11):
+#   - arkship_nw_seed: copy civilian_arkship_megastructure with its inline script;
+#       entity/construction_entity = "nw_tree_seed_entity"; cost per D4 (biomass with a pop kill in on_build_start,
+#       plus food); potential adds nw_is_uprooted_empire and tech_nw_seed_casting; on_build_complete creates the Ark
+#       with create_arkship_effect (the dropping Ark's class) and sets the tree culture, as vanilla removes the site.
+#   - The three vanilla sites are hidden for the Uprooted (D6-A) by a potential override of the shared inline script.
+#   - No arkship_nw_<class>_<tier> keys (D2-B). Their localisation keys are unused until Ark names are re-skinned.
 
-# arkship_nw_heartwood_1 = {
-# 	entity = "nw_tree_heartwood_01_entity"
-# 	<<VANILLA: construction_entity, portrait, place_entity_on_planet_plane, show_galaxy_in_background etc. from arkship_civilian_1>>
-# 	potential = {
-# 		<<VANILLA: body>>
-# 		owner = { nw_is_uprooted_empire = yes }
-# 	}
-# 	possible = { <<VANILLA: body>> }
-# 	upgrade_from = { arkship_nw_seed }
-# 	<<VANILLA: colony / ship_size / habitability wiring>>
-# 	on_build = {
-# 		<<VANILLA: body>>
-# 		planet = {
-# 			nw_tag_ark = { CLASS = heartwood TIER = 1 }
-# 			nw_plant_heartwood_core = yes
-# 			add_modifier = { modifier = nw_fruiting }
-# 		}
-# 	}
-# }
+# The earlier example skeleton (arkship_nw_heartwood_1 as a megastructure) was removed: D2-B makes per-class,
+# per-tier Ark megastructures unnecessary.

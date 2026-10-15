@@ -1,19 +1,27 @@
-# Heartwood Core: the Tree of Life of one Ark. Bonus values are placeholders
-# to be replaced with the vanilla Tree of Life deposit numbers (docs/04 H11).
+# Heartwood Core: the Tree of Life of one Ark. Values copied from vanilla d_tree_of_life_colony
+# (common/deposits/07_federations_deposits.txt:612-644); the homeworld variant d_tree_of_life_home
+# (:579-609) has 0.15 growth and +1000 housing. district_farming_max_add is left out: the
+# nomad district set has no farming district (common/districts/07_ark_districts.txt).
+# The design's flat "+5 biomass a month" was dropped on 2026-10-15: vanilla has no flat pop-growth planet modifier.
 
 d_nw_heartwood_core = {
 	is_for_colonizable = yes
 	category = deposit_cat_rare
 	icon = d_nw_heartwood_core
 	potential = {
-		# <<VANILLA: restrict to the Arkship colony planet class, e.g. is_planet_class = pc_arkship (docs/04 H5)>>
-		has_planet_flag = nw_tree_ark
+		# Arkship colony class (common/planet_classes/06_planet_classes_nomads.txt:1)
+		is_planet_class = pc_ark
 	}
 	planet_modifier = {
-		pop_growth_speed = 0.15
-		planet_housing_add = 10
-		planet_jobs_society_research_produces_mult = 0.10   # <<VANILLA: confirm key>>
-		planet_jobs_biomass_produces_add = 5                 # <<VANILLA: confirm key>>
+		logistic_growth_mult = 0.10
+		planet_housing_add = 500
+		planet_jobs_society_research_produces_mult = 0.10
+	}
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			food = 2
+		}
 	}
 	drop_weight = { weight = 0 }
 }
@@ -25,7 +33,7 @@ d_nw_husk_of_the_grove = {
 	icon = d_nw_husk
 	resources = {
 		category = planet_deposits
-		produces = { biomass = 2 }   # <<VANILLA: confirm biomass is a valid deposit resource>>
+		produces = { biomass = 2 }   # <<VANILLA: D4: the Husk is a one-off reward, so collecting it creates pops (create_pop_group, common/scripted_effects/biogenesis_effects.txt:2916-2919) from a harvest hook (common/on_actions/02_component_on_actions.txt:219-245); a produces block cannot do it. Planned in plan-missing-scripts.md P15; then delete this resources block.>>
 	}
 	potential = { is_planet_class = pc_shattered }
 	drop_weight = { weight = 0 }

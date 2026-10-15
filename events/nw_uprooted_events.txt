@@ -37,7 +37,10 @@ country_event = {
 	}
 }
 
-# Which aspect of the Grove endured? Picks the starting Ark class.
+# What Endured: flavour for the Ark class the player picked in the empire designer (decision D3-B).
+# Vanilla records that class as a country flag during empire setup
+# (common/scripted_effects/01_start_of_game_effects.txt:5206-5217): civilian = Heartwood,
+# science = Lumen, military = Thornwood. Only the matching option is shown.
 country_event = {
 	id = nw_uprooted.2
 	title = "nw_uprooted.2.name"
@@ -48,21 +51,30 @@ country_event = {
 
 	option = {
 		name = "nw_uprooted.2.heartwood"
+		trigger = {
+			OR = {
+				has_country_flag = starting_civilian_arkship
+				# fallback if no class flag is set
+				NOR = {
+					has_country_flag = starting_science_arkship
+					has_country_flag = starting_military_arkship
+				}
+			}
+		}
 		custom_tooltip = nw_uprooted.2.heartwood.tt
-		hidden_effect = { nw_swap_starting_ark = { CLASS = heartwood } }
-		ai_chance = { factor = 100 }
+		hidden_effect = { nw_apply_starting_ark_class = { CLASS = heartwood } }
 	}
 	option = {
 		name = "nw_uprooted.2.lumen"
+		trigger = { has_country_flag = starting_science_arkship }
 		custom_tooltip = nw_uprooted.2.lumen.tt
-		hidden_effect = { nw_swap_starting_ark = { CLASS = lumen } }
-		ai_chance = { factor = 0 }
+		hidden_effect = { nw_apply_starting_ark_class = { CLASS = lumen } }
 	}
 	option = {
 		name = "nw_uprooted.2.thornwood"
+		trigger = { has_country_flag = starting_military_arkship }
 		custom_tooltip = nw_uprooted.2.thornwood.tt
-		hidden_effect = { nw_swap_starting_ark = { CLASS = thornwood } }
-		ai_chance = { factor = 0 }
+		hidden_effect = { nw_apply_starting_ark_class = { CLASS = thornwood } }
 	}
 }
 
@@ -73,7 +85,8 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { nw_is_uprooted_empire = yes }
 	immediate = {
-		every_owned_planet = {
+		# Ark colonies are iterated as colonies (events/nomads_arkship_events.txt:5005-5008).
+		every_owned_colony = {
 			limit = { nw_is_tree_ark_colony = yes }
 			nw_check_wither = yes
 		}
@@ -95,7 +108,14 @@ country_event = {
 	immediate = { set_country_flag = nw_first_roothold_seen }
 	option = {
 		name = "nw_uprooted.10.a"
-		add_resource = { biomass = 50 }
+		# D4: biomass is the Wilderness pop count, so a biomass reward is new pops
+		# (create_pop_group, common/scripted_effects/biogenesis_effects.txt:2916-2919). Design value, balance pending.
+		capital_scope = {
+			create_pop_group = {
+				species = owner
+				size = 50
+			}
+		}
 	}
 }
 
@@ -128,7 +148,10 @@ country_event = {
 }
 
 # Memory of the Grove: an Ark returns to the Rootscar after year 20.
-# <<VANILLA: hook to the fleet-enters-system on_action, filtered on nw_rootscar_system flag>>
+# <<VANILLA: no hook yet. Cheapest: a yearly country check (on_yearly_pulse_country, common/on_actions/00_on_actions.txt:403)
+#   for an Ark fleet in the nw_rootscar_system system. Immediate alternative: on_entering_system_fleet (:973-976; scope = fleet,
+#   from = system) with a fleet_event relay that tests from = { has_star_flag = nw_rootscar_system } first.
+#   See docs/research/plan-event-timing.md.>>
 country_event = {
 	id = nw_uprooted.30
 	title = "nw_uprooted.30.name"
@@ -171,7 +194,14 @@ country_event = {
 	immediate = { set_country_flag = nw_midgame_done }
 	option = {
 		name = "nw_uprooted.40.a"   # Spend the memory: unity for biomass.
-		add_resource = { unity = -500 biomass = 500 }
+		add_resource = { unity = -500 }
+		# D4: the biomass half is new pops on the capital Ark. Design value, balance pending.
+		capital_scope = {
+			create_pop_group = {
+				species = owner
+				size = 500
+			}
+		}
 	}
 	option = {
 		name = "nw_uprooted.40.b"   # Keep drifting.
@@ -201,13 +231,21 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		event_target:nw_take_root_target = {
-			# <<VANILLA: replace pc_wilderness_homeworld with the real Wilderness planet class (docs/04 H16)>>
-			change_pc = pc_wilderness_homeworld
+			# <<VANILLA: D7-A reuses vanilla settling, which needs a colonizable target (common/scripted_actions/03_arkships.txt:1279-1282),
+			#   so there is no class change. The Wilderness capital building follows common/inline_scripts/game_start/origin_wilderness.txt:33-36;
+			#   the wilderness_planet carrier flag there is a start-only marker (removed at rural_districts_placement.txt:308). Planned in plan-missing-scripts.md P19.>>
+			# change_pc = pc_wilderness_homeworld
 			set_planet_size = 18
-			# <<VANILLA: add the vanilla Tree of Life deposit by its real key (docs/04 H11)>>
+			# <<VANILLA: D7-A carries the Ark's d_nw_heartwood_core to the planet with copy_deposit_from
+			#   (common/scripted_effects/00_scripted_effects.txt:9390-9399), run from .101 on on_arkship_settle while the Ark colony still
+			#   exists; vanilla destroys it in transfer_carrier (common/scripted_effects/nomads_effects.txt:5187-5194). D7-W (2026-10-15):
+			#   this event sets origin_wilderness, then the nw_uprooted flag, then re-sets the started_* flag. Planned in plan-missing-scripts.md P19.>>
 			set_planet_flag = nw_rooted_world
 		}
-		# <<VANILLA: invoke the vanilla "settle Arkship on planet" effect here so pops move and the empire converts (docs/02 §10)>>
+		# <<VANILLA: D7-A: the player settles with the vanilla arkship_settle action (common/scripted_actions/03_arkships.txt:1243-1329);
+		#   vanilla nomads.4700/4705 run arkship_settle_planet_effect (common/scripted_effects/nomads_effects.txt:5053-5223).
+		#   This event then fires from on_capital_changed (common/on_actions/00_on_actions.txt:3442-3454) instead of a decision.
+		#   Planned in plan-missing-scripts.md P19 and plan-event-timing.md.>>
 	}
 	option = {
 		name = "nw_uprooted.100.a"

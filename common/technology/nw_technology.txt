@@ -1,12 +1,19 @@
 # Uprooted-only technologies. Society / Biology. All gated on nw_is_uprooted_empire.
+# Decision D9 (2026-10-15): tiers 3-4, each hung off a vanilla Nomad gate.
+# Vanilla Nomad techs: common/technology/00_nomads_dlc_tech.txt. Cost/weight variables:
+# common/scripted_variables/00_scripted_variables.txt:229-264. A same-tier cross-area prerequisite has
+# vanilla precedent: tech_civilian_arkship (society, tier 3) requires tech_arkship_construction (engineering, tier 3)
+# (00_nomads_dlc_tech.txt:126-136).
 
+# Unlocks the Seed (arkship_nw_seed). Gate: tech_arkship_construction, which gates the vanilla Arkship
+# megastructures (00_nomads_dlc_tech.txt:3-38; inline_scripts/megastructures/arkship.txt:35).
 tech_nw_seed_casting = {
-	cost = @tier1cost1
+	cost = @tier3cost1
 	area = society
-	tier = 1
+	tier = 3
 	category = { biology }
-	prerequisites = { }   # <<VANILLA: set to the vanilla tech that unlocks building additional Arkships, so the two stay in step>>
-	weight = @tier1weight1
+	prerequisites = { "tech_arkship_construction" }
+	weight = @tier3weight1
 	potential = { nw_is_uprooted_empire = yes }
 	weight_modifier = {
 		factor = 3
@@ -14,35 +21,39 @@ tech_nw_seed_casting = {
 	ai_weight = { factor = 5 }
 }
 
+# Unlocks the Spore Nursery Roothold module. Gate: tech_waystation_2 "Improved Wayline Logistics" (00_nomads_dlc_tech.txt:520).
 tech_nw_lattice_sensing = {
-	cost = @tier2cost1
+	cost = @tier3cost1
 	area = society
-	tier = 2
+	tier = 3
 	category = { biology }
-	prerequisites = { "tech_nw_seed_casting" }   # plus the vanilla Improved Wayline Logistics key (docs/04 H8)
-	weight = @tier2weight1
+	prerequisites = { "tech_nw_seed_casting" "tech_waystation_2" }
+	weight = @tier3weight1
 	potential = { nw_is_uprooted_empire = yes }
 	ai_weight = { factor = 2 }
 }
 
+# Gates Husk collection (docs/02 §7, §11; confirmed 2026-10-15). Gate: tech_arkship_planetary_refinery, the Planetary Reprocessor
+# (the Taproot re-skin, decision D8) (00_nomads_dlc_tech.txt:268).
 tech_nw_deep_taproot = {
-	cost = @tier3cost1
+	cost = @tier4cost1
 	area = society
-	tier = 3
+	tier = 4
 	category = { biology }
-	prerequisites = { "tech_nw_lattice_sensing" }   # plus the vanilla tier-3 Arkship tech
-	weight = @tier3weight1
+	prerequisites = { "tech_nw_lattice_sensing" "tech_arkship_planetary_refinery" }
+	weight = @tier4weight1
 	potential = { nw_is_uprooted_empire = yes }
 	ai_weight = { factor = 2 }
 }
 
+# Unlocks Bole -> Elder Nurture. Gate: tech_arkship_tier_3 "Arkship Mastery", the vanilla tier-3 gate (00_nomads_dlc_tech.txt:81-124).
 tech_nw_elder_growth = {
-	cost = @tier3cost1
+	cost = @tier4cost1
 	area = society
-	tier = 3
+	tier = 4
 	category = { biology }
-	prerequisites = { "tech_nw_seed_casting" }   # plus the vanilla tier-3 Arkship tech
-	weight = @tier3weight1
+	prerequisites = { "tech_nw_seed_casting" "tech_arkship_tier_3" }
+	weight = @tier4weight1
 	potential = { nw_is_uprooted_empire = yes }
 	ai_weight = { factor = 3 }
 }

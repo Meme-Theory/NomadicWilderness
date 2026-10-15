@@ -1,13 +1,15 @@
 # Home system for the Uprooted: a star, the Rootscar (Shattered World) with its two deposits,
-# some rocky bodies to seed the first Roothold on, and the starting Ark.
-# The Ark itself is spawned by whatever vanilla origin_voidfarers uses (docs/04 H1/H16);
-# the hook below is a placeholder for that effect.
+# and some rocky bodies to seed the first Roothold on.
+# No initializer spawns the starting Arkship: the engine creates it from the empire
+# designer's ship_size (docs/research/vanilla-nomads-4.5.2.md §1.1).
 
 nw_uprooted_home_system = {
 	name = "NAME_nw_rootscar_system"
 	class = "sc_g"
-	flags = { nw_rootscar_system }
-	usage = empire_init
+	# empire_home_system is set by every vanilla home initializer (e.g. toxoid_initializers.txt:24,
+	# 00_nomad_custom_initializers.txt:23-25) and read by deposit weights (01_planetary_deposits.txt:1166).
+	flags = { nw_rootscar_system empire_home_system }
+	usage = origin	# listed by origin_nw_uprooted; see solar_system_initializers/example.txt:27,30
 	max_instances = 1
 
 	planet = {
@@ -64,8 +66,8 @@ nw_uprooted_home_system = {
 	}
 
 	init_effect = {
-		# <<VANILLA: paste the starting-Arkship spawn from the Voidfarers initializer here,
-		#   with the Arkship key swapped to arkship_nw_heartwood_1 (docs/04 H1).>>
+		# Vanilla nomad and origin initializers also mark the neighbourhood and seed home resources
+		# (00_nomad_custom_initializers.txt:27-34, toxoid_initializers.txt:26-33); see plan-missing-scripts.md.
 		random_system_planet = {
 			limit = { has_planet_flag = nw_rootscar }
 			save_global_event_target_as = nw_rootscar_planet

@@ -1,12 +1,41 @@
-# TEMPLATE
-# Overrides of vanilla identity triggers so vanilla Wilderness and Nomad content
-# recognises the Uprooted. Each block must be the VERBATIM vanilla body plus one
-# added OR branch. Do not ship this file until H2/H3 in docs/04 are resolved.
+# Overrides of vanilla identity triggers so vanilla Wilderness content recognises the Uprooted
+# (decision D1-A, 2026-10-15: standalone origin plus overrides). Each block is the VERBATIM vanilla
+# body plus one added branch for origin_nw_uprooted. Re-copy the vanilla body after every patch.
+#
+# Vanilla sources (install v4.5.2):
+#   is_wilderness_empire              common/scripted_triggers/00_scripted_triggers.txt:1766-1769 (1334 references)
+#   has_purity_ascension              common/scripted_triggers/05_scripted_triggers_biogenesis.txt:138-143
+#                                     (used by common/council_agendas/02_council_agendas_ascensions.txt)
+#   has_one_genetic_ascension_choice  common/scripted_triggers/05_scripted_triggers_biogenesis.txt:189-195
+#                                     (used by events/biogenesis_events.txt)
+# Nomadic status needs no override: is_nomadic is an engine country flag
+# (set_country_code_flags, common/scripted_effects/nomads_effects.txt:6-8).
+# The other raw has_origin = origin_wilderness checks are listed in docs/research/vanilla-nomads-4.5.2.md §2.1;
+# the ones not overridden here are planned in docs/research/plan-missing-scripts.md P1.
+# Whether a same-key scripted trigger in a zz_ file replaces the vanilla one is checked on the
+# first test load (docs/05-roadmap.md).
 
-# <<VANILLA: copy the body of the Wilderness identity scripted trigger here>>
-# is_wilderness_empire = {
-# 	OR = {
-# 		<vanilla body>
-# 		has_origin = origin_nw_uprooted
-# 	}
-# }
+is_wilderness_empire = {
+	# NOTE: presents as an 'advanced_authority_swap' from auth_hive_mind
+	OR = {
+		has_origin = origin_wilderness
+		has_origin = origin_nw_uprooted
+	}
+}
+
+has_purity_ascension = {
+	OR = {
+		has_country_flag = purity_tradition_unlocked
+		has_origin = origin_wilderness
+		has_origin = origin_nw_uprooted
+	}
+}
+
+has_one_genetic_ascension_choice = {
+	OR = {
+		has_origin = origin_evolutionary_predators
+		has_origin = origin_wilderness
+		has_country_flag = clone_army_full_potential
+		has_origin = origin_nw_uprooted
+	}
+}

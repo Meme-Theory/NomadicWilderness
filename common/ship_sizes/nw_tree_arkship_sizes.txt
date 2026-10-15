@@ -1,17 +1,17 @@
 # TEMPLATE
-# Ship sizes for the Tree Arks and the two Seedwings. Each is a copy of the matching
-# vanilla size with the edits listed (docs/04 H4, H15).
+# Obsolete under decision D2-B (2026-10-15): the Uprooted keep the vanilla Arkship sizes and classes, and the
+# tree look comes from a mod graphical culture (docs/03-arkship-models.md). No nw_ ship sizes are planned.
+# Delete this file once the first test load confirms the culture approach (docs/05-roadmap.md).
 #
-# Expected keys:
-#   nw_tree_heartwood_1..3, nw_tree_lumen_1..3, nw_tree_thornwood_1..3
-#   nw_seedwing (copy of the Wilderness construction/logistic ship size)
-#   nw_seedwing_scout (copy of the Wilderness science ship size)
+# Why no new sizes: vanilla Arkship content tests ship sizes by name. is_arkship_ship, is_arkship_starbase,
+# is_<class>_arkship, is_<class>_arkship_starbase, is_arkship_tier_1..3 and arkship_spinal_slot_free
+# (common/scripted_triggers/09_scripted_triggers_nomads.txt:169-369) all list the ten vanilla sizes.
 #
-# Edits:
-#   entity            -> nw_tree_<class>_0<tier>_entity
-#   Thornwood only    -> add  modifier = { ship_hull_regen_add_perc = 0.02 }   (Living Hull, out of combat)
-#   Lumen only        -> add the survey capability flag vanilla science ships carry (half speed via modifier)
-#   cost              -> seedwings: food instead of alloys, as vanilla Wilderness bioships
-#   construction_capabilities -> seedwing: same as vanilla Logistic Ship (4.4 added this field)
+# Fallback if the first test load shows that an Ark size rejects a mod culture: each vanilla Arkship size
+# restricts its cultures, e.g. graphical_culture = { "civilian_arkship" } (common/ship_sizes/29_nomads_dlc_ships.txt:108,
+# :227,:355,:487,:609,:739,:873,:994,:1123). The fallback overrides those nine size blocks verbatim, adding the
+# mod cultures to that list, in a zz_ file in common/ship_sizes/ (plan-missing-scripts.md P12). Keys stay vanilla.
 #
-# Spinal mount slot: tier-3 sizes keep the vanilla spinal section; see nw_spinal_mounts.txt.
+# Seedwings need no size either (plan-missing-scripts.md P17): the Logistic Ship (nomads_constructor,
+# 29_nomads_dlc_ships.txt:1337-1443) and the science ship already cost food for bioship empires and already
+# use the bioship culture's models (gfx/models/ships/biogenesis_01/_biogenesis_01_ships_entities.asset:1036,1345).

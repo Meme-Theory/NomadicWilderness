@@ -1,0 +1,24 @@
+# Sprites for Nomadic Wilderness: The Uprooted.
+# Origin picture follows vanilla interface/origin_eventpictures.gfx: 220x115 picture plus the two
+# zoom crops (143x104, 110x80) that 59 of 60 vanilla origins define for the timeline view.
+# Art source: Yggdrasil, Loki season 2 episode 6 "Glorious Purpose" (Marvel Studios / Disney). See CREDITS.md.
+
+spriteTypes = {
+	spriteType = {
+		name = "GFX_origin_nw_uprooted"
+		texturefile = "gfx/event_pictures/origins/origin_nw_uprooted.dds"
+		alwaystransparent = yes
+	}
+	spriteType = {
+		parent = "GFX_origin_nw_uprooted"
+		name = "GFX_origin_nw_uprooted_zoom_1"
+		upper_left = { x = 42 y = 6 }
+		lower_right = { x = 185 y = 110 }
+	}
+	spriteType = {
+		parent = "GFX_origin_nw_uprooted"
+		name = "GFX_origin_nw_uprooted_zoom_2"
+		upper_left = { x = 58 y = 25 }
+		lower_right = { x = 168 y = 105 }
+	}
+}
