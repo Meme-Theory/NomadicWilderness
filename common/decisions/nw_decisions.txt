@@ -1,0 +1,89 @@
+# Decisions on Ark colonies.
+
+# Transplant Sapling: an intact Ark in the same system restores a withered one.
+# Cost mirrors the vanilla Tree of Life transplant (500 food, 180 days; docs/04 H11).
+decision_nw_transplant_sapling = {
+	owned_planets_only = yes
+	icon = decision_nw_transplant_sapling
+	enactment_time = 180
+	resources = {
+		category = decisions
+		cost = { food = 500 }
+	}
+	potential = {
+		nw_is_tree_ark_colony = yes
+		nw_ark_is_withered = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "nw_requires_intact_ark_in_system"
+			solar_system = {
+				any_system_planet = {
+					nw_is_tree_ark_colony = yes
+					nw_ark_has_heartwood = yes
+					NOT = { is_same_value = root }
+				}
+			}
+		}
+	}
+	effect = {
+		nw_plant_heartwood_core = yes
+		owner = {
+			if = {
+				limit = { NOT = { has_country_flag = nw_first_transplant_seen } }
+				set_country_flag = nw_first_transplant_seen
+				country_event = { id = nw_uprooted.21 }
+			}
+		}
+	}
+	ai_weight = {
+		weight = 100
+	}
+}
+
+# Take Root: the last Elder Ark becomes a planet's heart. See docs/02 §10.
+decision_nw_take_root = {
+	owned_planets_only = yes
+	icon = decision_nw_take_root
+	enactment_time = 720
+	resources = {
+		category = decisions
+		cost = {
+			biomass = 3000   # <<VANILLA: confirm biomass spendable in decisions (docs/04 H13)>>
+			food = 1000
+		}
+	}
+	potential = {
+		nw_is_tree_ark_colony = yes
+		nw_ark_is_elder = yes
+	}
+	allow = {
+		custom_tooltip = {
+			fail_text = "nw_take_root_last_ark_only"
+			owner = { count_owned_planet = { limit = { nw_is_tree_ark_colony = yes } count = 1 } }
+		}
+		custom_tooltip = {
+			fail_text = "nw_take_root_needs_target"
+			solar_system = {
+				any_system_planet = {
+					is_planet_class = pc_barren
+					NOT = { exists = owner }
+				}
+			}
+		}
+	}
+	effect = {
+		owner = { set_country_flag = nw_take_root_pending }
+		solar_system = {
+			random_system_planet = {
+				limit = {
+					is_planet_class = pc_barren
+					NOT = { exists = owner }
+				}
+				save_event_target_as = nw_take_root_target
+			}
+		}
+		owner = { country_event = { id = nw_uprooted.100 } }
+	}
+	ai_weight = { weight = 0 }
+}

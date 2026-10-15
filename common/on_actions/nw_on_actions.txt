@@ -1,0 +1,19 @@
+on_game_start_country = {
+	events = {
+		nw_uprooted.1
+	}
+}
+
+on_monthly_pulse_country = {
+	events = {
+		nw_uprooted.5     # wither check on every Ark
+	}
+}
+
+on_mid_game_pulse_country = {
+	events = {
+		nw_uprooted.40
+	}
+}
+
+# <<VANILLA: hook the Waystation-built on_action (name unknown) to fire nw_uprooted.10 on the first Roothold>>

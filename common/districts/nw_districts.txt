@@ -1,0 +1,18 @@
+# TEMPLATE
+# Deck districts for the Tree Arks (docs/02 §4). Vanilla Arkship district keys are needed
+# to copy from (docs/04 H10). Each Uprooted deck is a copy of the vanilla deck with:
+#   potential -> add  owner = { nw_is_uprooted_empire = yes }  and the vanilla deck gets the inverse
+#   resources -> cost = { biomass = 50 }  (vanilla Wilderness district cost)
+#   jobs      -> the vanilla Wilderness hive job keys (docs/04 H14)
+#
+# Expected keys:
+#   district_nw_heartgrove_hollow   (housing;          from the Arkship city/habitation deck)
+#   district_nw_sunleaf_canopy      (photosymbionts;   from the Arkship generator deck)
+#   district_nw_fruiting_bough      (nectar gatherers; from the Arkship farming deck)
+#   district_nw_thorn_nursery       (warrior drones;   from Ordnance Engineering)
+#
+# Arkship Deck specialisations become Uprooted zones/specialisations:
+#   zone_nw_root_bay        (grubsymbionts; from Harvesting Bay)
+#   zone_nw_spore_garden    (nectar + biomass; from Ark Hydroponics)
+#   zone_nw_sensory_bloom   (synapse drones; from Socio-Ecological Observation)
+#   zone_nw_lattice_node    (mycelial comptrollers; from Waystation Trade Hub)

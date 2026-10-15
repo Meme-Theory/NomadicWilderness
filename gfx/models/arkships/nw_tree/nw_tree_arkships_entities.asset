@@ -1,0 +1,71 @@
+# Entity definitions. Names are referenced by the megastructure and ship-size templates.
+# States: idle, moving, combat (Thornwood: talons; Heartwood: root cage opens for harvest), death.
+# The Seed entity is the construction state for all three classes (docs/03 §4).
+# Locators (every tier): spinal_mount, root_collar (thrust), dock_01..dock_04, module_01..module_NN,
+# system_glow_01..NN, canopy_centre, heartwood_core (the glow that dies on wither).
+
+entity = {
+	name = "nw_tree_seed_entity"
+	pdxmesh = "nw_tree_seed_mesh"
+	default_state = "idle"
+	state = { name = "idle"   animation = "idle" }
+	state = { name = "moving" animation = "idle" }
+	state = { name = "death"  animation = "death" }
+}
+
+# --- Heartwood Ark (Civilian) ---
+entity = {
+	name = "nw_tree_heartwood_01_entity"
+	pdxmesh = "nw_tree_heartwood_01_mesh"
+	default_state = "idle"
+	state = { name = "idle"   animation = "idle" }
+	state = { name = "moving" animation = "moving" }
+	state = { name = "combat" animation = "harvest" }   # root cage opens, Taproot extends
+	state = { name = "death"  animation = "death" }
+	locator = { name = "heartwood_core" position = { 0 0 0 } }
+}
+entity = { name = "nw_tree_heartwood_02_entity" clone = "nw_tree_heartwood_01_entity" pdxmesh = "nw_tree_heartwood_02_mesh" }
+entity = { name = "nw_tree_heartwood_03_entity" clone = "nw_tree_heartwood_01_entity" pdxmesh = "nw_tree_heartwood_03_mesh" }
+
+# --- Lumen Ark (Scientific) ---
+entity = {
+	name = "nw_tree_lumen_01_entity"
+	pdxmesh = "nw_tree_lumen_01_mesh"
+	default_state = "idle"
+	state = { name = "idle"   animation = "idle" }
+	state = { name = "moving" animation = "moving" }
+	state = { name = "combat" animation = "idle" }
+	state = { name = "death"  animation = "death" }
+	locator = { name = "heartwood_core" position = { 0 0 0 } }
+}
+entity = { name = "nw_tree_lumen_02_entity" clone = "nw_tree_lumen_01_entity" pdxmesh = "nw_tree_lumen_02_mesh" }
+entity = { name = "nw_tree_lumen_03_entity" clone = "nw_tree_lumen_01_entity" pdxmesh = "nw_tree_lumen_03_mesh" }
+
+# --- Thornwood Ark (Military) ---
+entity = {
+	name = "nw_tree_thornwood_01_entity"
+	pdxmesh = "nw_tree_thornwood_01_mesh"
+	default_state = "idle"
+	state = { name = "idle"   animation = "idle" }
+	state = { name = "moving" animation = "moving" }
+	state = { name = "combat" animation = "combat" }   # talons flex, thorns extend, veins bright
+	state = { name = "death"  animation = "death" }
+	locator = { name = "heartwood_core" position = { 0 0 0 } }
+}
+entity = { name = "nw_tree_thornwood_02_entity" clone = "nw_tree_thornwood_01_entity" pdxmesh = "nw_tree_thornwood_02_mesh" }
+entity = { name = "nw_tree_thornwood_03_entity" clone = "nw_tree_thornwood_01_entity" pdxmesh = "nw_tree_thornwood_03_mesh" }
+
+# --- Roothold (Waystation) and Seedwings ---
+entity = { name = "nw_roothold_01_entity" pdxmesh = "nw_roothold_01_mesh" default_state = "idle" state = { name = "idle" animation = "idle" } }
+entity = { name = "nw_roothold_02_entity" pdxmesh = "nw_roothold_02_mesh" default_state = "idle" state = { name = "idle" animation = "idle" } }
+entity = { name = "nw_roothold_03_entity" pdxmesh = "nw_roothold_03_mesh" default_state = "idle" state = { name = "idle" animation = "idle" } }
+
+entity = {
+	name = "nw_seedwing_entity"
+	pdxmesh = "nw_seedwing_mesh"
+	default_state = "idle"
+	state = { name = "idle"   animation = "idle" }
+	state = { name = "moving" animation = "moving" }
+	state = { name = "death"  animation = "death" }
+}
+entity = { name = "nw_seedwing_scout_entity" clone = "nw_seedwing_entity" pdxmesh = "nw_seedwing_scout_mesh" }

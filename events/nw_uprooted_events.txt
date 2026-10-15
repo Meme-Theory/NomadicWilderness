@@ -1,0 +1,220 @@
+namespace = nw_uprooted
+
+# ---------------------------------------------------------------------------
+# Opening: The Uprooting
+# ---------------------------------------------------------------------------
+country_event = {
+	id = nw_uprooted.1
+	title = "nw_uprooted.1.name"
+	desc = "nw_uprooted.1.desc"
+	picture = GFX_evt_nw_uprooting
+	show_sound = event_default
+	is_triggered_only = yes
+
+	trigger = {
+		nw_is_uprooted_empire = yes
+		NOT = { has_country_flag = nw_opening_done }
+	}
+
+	immediate = {
+		set_country_flag = nw_opening_done
+	}
+
+	option = {
+		name = "nw_uprooted.1.a"   # The star was dying.
+		set_country_flag = nw_blight_star
+		country_event = { id = nw_uprooted.2 }
+	}
+	option = {
+		name = "nw_uprooted.1.b"   # Something came.
+		set_country_flag = nw_blight_visitor
+		country_event = { id = nw_uprooted.2 }
+	}
+	option = {
+		name = "nw_uprooted.1.c"   # We ate our own world.
+		set_country_flag = nw_blight_overgrowth
+		country_event = { id = nw_uprooted.2 }
+	}
+}
+
+# Which aspect of the Grove endured? Picks the starting Ark class.
+country_event = {
+	id = nw_uprooted.2
+	title = "nw_uprooted.2.name"
+	desc = "nw_uprooted.2.desc"
+	picture = GFX_evt_nw_grove
+	show_sound = event_default
+	is_triggered_only = yes
+
+	option = {
+		name = "nw_uprooted.2.heartwood"
+		custom_tooltip = nw_uprooted.2.heartwood.tt
+		hidden_effect = { nw_swap_starting_ark = { CLASS = heartwood } }
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = "nw_uprooted.2.lumen"
+		custom_tooltip = nw_uprooted.2.lumen.tt
+		hidden_effect = { nw_swap_starting_ark = { CLASS = lumen } }
+		ai_chance = { factor = 0 }
+	}
+	option = {
+		name = "nw_uprooted.2.thornwood"
+		custom_tooltip = nw_uprooted.2.thornwood.tt
+		hidden_effect = { nw_swap_starting_ark = { CLASS = thornwood } }
+		ai_chance = { factor = 0 }
+	}
+}
+
+# Monthly wither check across every Ark colony.
+country_event = {
+	id = nw_uprooted.5
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { nw_is_uprooted_empire = yes }
+	immediate = {
+		every_owned_planet = {
+			limit = { nw_is_tree_ark_colony = yes }
+			nw_check_wither = yes
+		}
+	}
+}
+
+# First Roothold.
+country_event = {
+	id = nw_uprooted.10
+	title = "nw_uprooted.10.name"
+	desc = "nw_uprooted.10.desc"
+	picture = GFX_evt_nw_roothold
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		nw_is_uprooted_empire = yes
+		NOT = { has_country_flag = nw_first_roothold_seen }
+	}
+	immediate = { set_country_flag = nw_first_roothold_seen }
+	option = {
+		name = "nw_uprooted.10.a"
+		add_resource = { biomass = 50 }
+	}
+}
+
+# First wither.
+country_event = {
+	id = nw_uprooted.20
+	title = "nw_uprooted.20.name"
+	desc = "nw_uprooted.20.desc"
+	picture = GFX_evt_nw_wither
+	show_sound = event_alien_nature
+	is_triggered_only = yes
+	option = {
+		name = "nw_uprooted.20.a"
+		custom_tooltip = nw_uprooted.20.a.tt
+	}
+}
+
+# First transplant.
+country_event = {
+	id = nw_uprooted.21
+	title = "nw_uprooted.21.name"
+	desc = "nw_uprooted.21.desc"
+	picture = GFX_evt_nw_grove
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = "nw_uprooted.21.a"
+		add_resource = { unity = 100 }
+	}
+}
+
+# Memory of the Grove: an Ark returns to the Rootscar after year 20.
+# <<VANILLA: hook to the fleet-enters-system on_action, filtered on nw_rootscar_system flag>>
+country_event = {
+	id = nw_uprooted.30
+	title = "nw_uprooted.30.name"
+	desc = "nw_uprooted.30.desc"
+	picture = GFX_evt_nw_rootscar
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		nw_is_uprooted_empire = yes
+		years_passed > 20
+		NOT = { has_country_flag = nw_memory_done }
+	}
+	immediate = { set_country_flag = nw_memory_done }
+	option = {
+		name = "nw_uprooted.30.a"   # Take the dormant sapling.
+		custom_tooltip = nw_uprooted.30.a.tt
+		hidden_effect = {
+			event_target:nw_rootscar_planet = { remove_deposit = d_nw_dormant_sapling }
+			set_country_flag = nw_has_emergency_sapling
+		}
+	}
+	option = {
+		name = "nw_uprooted.30.b"   # Leave it. Remember.
+		add_modifier = { modifier = nw_memory_of_the_grove }
+	}
+}
+
+# Mid-game reflection.
+country_event = {
+	id = nw_uprooted.40
+	title = "nw_uprooted.40.name"
+	desc = "nw_uprooted.40.desc"
+	picture = GFX_evt_nw_grove
+	show_sound = event_default
+	is_triggered_only = yes
+	trigger = {
+		nw_is_uprooted_empire = yes
+		NOT = { has_country_flag = nw_midgame_done }
+	}
+	immediate = { set_country_flag = nw_midgame_done }
+	option = {
+		name = "nw_uprooted.40.a"   # Spend the memory: unity for biomass.
+		add_resource = { unity = -500 biomass = 500 }
+	}
+	option = {
+		name = "nw_uprooted.40.b"   # Keep drifting.
+	}
+}
+
+# Nurture complete.
+country_event = {
+	id = nw_uprooted.50
+	title = "nw_uprooted.50.name"
+	desc = "nw_uprooted.50.desc"
+	picture = GFX_evt_nw_seed
+	show_sound = event_default
+	is_triggered_only = yes
+	option = {
+		name = "nw_uprooted.50.a"
+	}
+}
+
+# Take Root: ending.
+country_event = {
+	id = nw_uprooted.100
+	title = "nw_uprooted.100.name"
+	desc = "nw_uprooted.100.desc"
+	picture = GFX_evt_nw_take_root
+	show_sound = event_default
+	is_triggered_only = yes
+	immediate = {
+		event_target:nw_take_root_target = {
+			# <<VANILLA: replace pc_wilderness_homeworld with the real Wilderness planet class (docs/04 H16)>>
+			change_pc = pc_wilderness_homeworld
+			set_planet_size = 18
+			# <<VANILLA: add the vanilla Tree of Life deposit by its real key (docs/04 H11)>>
+			set_planet_flag = nw_rooted_world
+		}
+		# <<VANILLA: invoke the vanilla "settle Arkship on planet" effect here so pops move and the empire converts (docs/02 §10)>>
+	}
+	option = {
+		name = "nw_uprooted.100.a"
+		custom_tooltip = nw_uprooted.100.a.tt
+		hidden_effect = {
+			remove_country_flag = nw_take_root_pending
+			set_country_flag = nw_rooted
+		}
+	}
+}

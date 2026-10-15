@@ -1,0 +1,24 @@
+# Mesh registrations for the Tree Arks. One pdxmesh per file listed in docs/03 §7.
+# Shader: the standard PdxMeshShip shader with an added "wither" float driven from script
+# (see nw_tree_arkships_entities.asset). Texture names follow the three material sets in docs/03 §1.
+
+pdxmesh = { name = "nw_tree_seed_mesh"         file = "nw_tree_seed.mesh"         scale = 1.0 }
+
+pdxmesh = { name = "nw_tree_heartwood_01_mesh" file = "nw_tree_heartwood_01.mesh" scale = 1.0 }
+pdxmesh = { name = "nw_tree_heartwood_02_mesh" file = "nw_tree_heartwood_02.mesh" scale = 1.0 }
+pdxmesh = { name = "nw_tree_heartwood_03_mesh" file = "nw_tree_heartwood_03.mesh" scale = 1.0 }
+
+pdxmesh = { name = "nw_tree_lumen_01_mesh"     file = "nw_tree_lumen_01.mesh"     scale = 1.0 }
+pdxmesh = { name = "nw_tree_lumen_02_mesh"     file = "nw_tree_lumen_02.mesh"     scale = 1.0 }
+pdxmesh = { name = "nw_tree_lumen_03_mesh"     file = "nw_tree_lumen_03.mesh"     scale = 1.0 }
+
+pdxmesh = { name = "nw_tree_thornwood_01_mesh" file = "nw_tree_thornwood_01.mesh" scale = 1.0 }
+pdxmesh = { name = "nw_tree_thornwood_02_mesh" file = "nw_tree_thornwood_02.mesh" scale = 1.0 }
+pdxmesh = { name = "nw_tree_thornwood_03_mesh" file = "nw_tree_thornwood_03.mesh" scale = 1.0 }
+
+pdxmesh = { name = "nw_roothold_01_mesh"       file = "nw_roothold_01.mesh"       scale = 1.0 }
+pdxmesh = { name = "nw_roothold_02_mesh"       file = "nw_roothold_02.mesh"       scale = 1.0 }
+pdxmesh = { name = "nw_roothold_03_mesh"       file = "nw_roothold_03.mesh"       scale = 1.0 }
+
+pdxmesh = { name = "nw_seedwing_mesh"          file = "nw_seedwing.mesh"          scale = 1.0 }
+pdxmesh = { name = "nw_seedwing_scout_mesh"    file = "nw_seedwing_scout.mesh"    scale = 1.0 }

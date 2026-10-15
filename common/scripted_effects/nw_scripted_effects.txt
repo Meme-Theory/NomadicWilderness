@@ -1,0 +1,75 @@
+# Scripted effects. Scope noted on each.
+
+# planet scope (an Ark colony). Gives the Ark its Tree of Life.
+nw_plant_heartwood_core = {
+	remove_modifier = nw_withered_heartwood
+	if = {
+		limit = { NOT = { has_deposit = d_nw_heartwood_core } }
+		add_deposit = d_nw_heartwood_core
+	}
+}
+
+# planet scope. The tree dies back.
+nw_wither_heartwood = {
+	remove_deposit = d_nw_heartwood_core
+	add_modifier = { modifier = nw_withered_heartwood }
+	owner = {
+		if = {
+			limit = { NOT = { has_country_flag = nw_first_wither_seen } }
+			set_country_flag = nw_first_wither_seen
+			country_event = { id = nw_uprooted.20 }
+		}
+	}
+}
+
+# planet scope. Hull threshold depends on class (Thornwood gets Living Hull).
+nw_check_wither = {
+	if = {
+		limit = {
+			nw_ark_has_heartwood = yes
+			OR = {
+				AND = {
+					NOT = { has_planet_flag = nw_ark_thornwood }
+					# <<VANILLA: replace with the real hull-percent trigger on the Ark megastructure/ship, e.g.
+					#   from_megastructure / fleet = { any_owned_ship = { hull_percent < 0.25 } } (docs/04 H4)>>
+					has_planet_flag = nw_debug_force_wither
+				}
+				AND = {
+					has_planet_flag = nw_ark_thornwood
+					has_planet_flag = nw_debug_force_wither   # <<VANILLA: hull_percent < 0.375>>
+				}
+			}
+		}
+		nw_wither_heartwood = yes
+	}
+}
+
+# country scope. Marks a freshly spawned or upgraded Ark colony with class and tier flags.
+# Parameters: CLASS = heartwood|lumen|thornwood, TIER = 1|2|3
+nw_tag_ark = {
+	set_planet_flag = nw_tree_ark
+	remove_planet_flag = nw_ark_tier_1
+	remove_planet_flag = nw_ark_tier_2
+	remove_planet_flag = nw_ark_tier_3
+	set_planet_flag = nw_ark_tier_$TIER$
+	remove_planet_flag = nw_ark_heartwood
+	remove_planet_flag = nw_ark_lumen
+	remove_planet_flag = nw_ark_thornwood
+	set_planet_flag = nw_ark_$CLASS$
+}
+
+# country scope. Replaces the starting Ark with the chosen class. Parameter: CLASS.
+# <<VANILLA: the megastructure swap effect depends on how vanilla spawns the starting Arkship (docs/04 H1).
+#   Expected shape: find the Ark megastructure, remove it, spawn arkship_nw_$CLASS$_1 in the same orbit,
+#   then move pops. Until then this only tags the existing Ark colony.>>
+nw_swap_starting_ark = {
+	every_owned_planet = {
+		limit = { has_planet_flag = nw_tree_ark }
+		nw_tag_ark = { CLASS = $CLASS$ TIER = 1 }
+		nw_plant_heartwood_core = yes
+		remove_modifier = nw_fruiting
+		remove_modifier = nw_spore_survey
+		remove_modifier = nw_living_hull
+		add_modifier = { modifier = nw_$CLASS$_trait }
+	}
+}

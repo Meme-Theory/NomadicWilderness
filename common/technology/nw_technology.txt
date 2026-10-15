@@ -1,0 +1,48 @@
+# Uprooted-only technologies. Society / Biology. All gated on nw_is_uprooted_empire.
+
+tech_nw_seed_casting = {
+	cost = @tier1cost1
+	area = society
+	tier = 1
+	category = { biology }
+	prerequisites = { }   # <<VANILLA: set to the vanilla tech that unlocks building additional Arkships, so the two stay in step>>
+	weight = @tier1weight1
+	potential = { nw_is_uprooted_empire = yes }
+	weight_modifier = {
+		factor = 3
+	}
+	ai_weight = { factor = 5 }
+}
+
+tech_nw_lattice_sensing = {
+	cost = @tier2cost1
+	area = society
+	tier = 2
+	category = { biology }
+	prerequisites = { "tech_nw_seed_casting" }   # plus the vanilla Improved Wayline Logistics key (docs/04 H8)
+	weight = @tier2weight1
+	potential = { nw_is_uprooted_empire = yes }
+	ai_weight = { factor = 2 }
+}
+
+tech_nw_deep_taproot = {
+	cost = @tier3cost1
+	area = society
+	tier = 3
+	category = { biology }
+	prerequisites = { "tech_nw_lattice_sensing" }   # plus the vanilla tier-3 Arkship tech
+	weight = @tier3weight1
+	potential = { nw_is_uprooted_empire = yes }
+	ai_weight = { factor = 2 }
+}
+
+tech_nw_elder_growth = {
+	cost = @tier3cost1
+	area = society
+	tier = 3
+	category = { biology }
+	prerequisites = { "tech_nw_seed_casting" }   # plus the vanilla tier-3 Arkship tech
+	weight = @tier3weight1
+	potential = { nw_is_uprooted_empire = yes }
+	ai_weight = { factor = 3 }
+}

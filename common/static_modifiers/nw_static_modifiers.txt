@@ -1,0 +1,59 @@
+# All colony-scope modifiers. 4.4.4 applies planet-class modifiers to Arkship colonies;
+# docs/04 §7 notes these must target colonies rather than planets. Verify scope name.
+
+nw_withered_heartwood = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_withered_heartwood.dds"
+	icon_frame = 3
+	# Mirrors vanilla Lost Tree of Life (values to be copied from vanilla, docs/04 H11).
+	planet_building_build_speed_mult = -0.50
+	planet_jobs_produces_mult = -0.25
+	planet_jobs_upkeep_mult = 0.10
+	planet_stability_add = -5
+	planet_jobs_biomass_produces_mult = -0.50   # <<VANILLA: confirm biomass modifier name>>
+}
+
+nw_fruiting = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_fruiting.dds"
+	icon_frame = 1
+	# Heartwood Ark trait. The 10% biomass credit on harvest is applied by effect; this is the tooltip carrier.
+	planet_jobs_biomass_produces_mult = 0.05   # <<VANILLA: confirm biomass modifier name>>
+}
+
+nw_living_hull = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_living_hull.dds"
+	icon_frame = 1
+	# Thornwood Ark trait. Hull regen lives on the ship size; this is the colony-side tooltip carrier.
+	planet_stability_add = 2
+}
+
+nw_spore_survey = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_spore_survey.dds"
+	icon_frame = 1
+	# Lumen Ark trait. Survey behaviour is granted on the ship size.
+	planet_jobs_research_produces_mult = 0.02   # <<VANILLA: confirm research modifier name in 4.x (may be planet_researchers_produces_mult)>>
+}
+
+nw_nurture_forced_bloom = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_nurture.dds"
+	icon_frame = 3
+	# Applied to the Ark fleet during the Forced Bloom approach.
+	ship_hull_mult = -0.25
+}
+
+nw_nurture_dormancy = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_nurture.dds"
+	icon_frame = 1
+	ship_hull_mult = 0.20
+}
+
+nw_memory_of_the_grove = {
+	icon = "gfx/interface/icons/modifiers/mod_nw_memory.dds"
+	icon_frame = 1
+	# Country modifier from nw_uprooted.30 if the player leaves the dormant sapling.
+	planet_jobs_biomass_produces_mult = 0.05   # <<VANILLA: confirm biomass modifier name>>
+}
+
+# Aliases so nw_swap_starting_ark can address a trait by class name.
+nw_heartwood_trait = { icon = "gfx/interface/icons/modifiers/mod_nw_fruiting.dds"      icon_frame = 1 planet_jobs_biomass_produces_mult = 0.05 }
+nw_lumen_trait     = { icon = "gfx/interface/icons/modifiers/mod_nw_spore_survey.dds" icon_frame = 1 planet_jobs_research_produces_mult = 0.02 }
+nw_thornwood_trait = { icon = "gfx/interface/icons/modifiers/mod_nw_living_hull.dds"  icon_frame = 1 planet_stability_add = 2 }

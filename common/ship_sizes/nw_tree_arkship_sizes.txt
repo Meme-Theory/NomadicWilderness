@@ -1,0 +1,17 @@
+# TEMPLATE
+# Ship sizes for the Tree Arks and the two Seedwings. Each is a copy of the matching
+# vanilla size with the edits listed (docs/04 H4, H15).
+#
+# Expected keys:
+#   nw_tree_heartwood_1..3, nw_tree_lumen_1..3, nw_tree_thornwood_1..3
+#   nw_seedwing (copy of the Wilderness construction/logistic ship size)
+#   nw_seedwing_scout (copy of the Wilderness science ship size)
+#
+# Edits:
+#   entity            -> nw_tree_<class>_0<tier>_entity
+#   Thornwood only    -> add  modifier = { ship_hull_regen_add_perc = 0.02 }   (Living Hull, out of combat)
+#   Lumen only        -> add the survey capability flag vanilla science ships carry (half speed via modifier)
+#   cost              -> seedwings: food instead of alloys, as vanilla Wilderness bioships
+#   construction_capabilities -> seedwing: same as vanilla Logistic Ship (4.4 added this field)
+#
+# Spinal mount slot: tier-3 sizes keep the vanilla spinal section; see nw_spinal_mounts.txt.

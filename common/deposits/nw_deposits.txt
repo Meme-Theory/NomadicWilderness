@@ -1,0 +1,41 @@
+# Heartwood Core: the Tree of Life of one Ark. Bonus values are placeholders
+# to be replaced with the vanilla Tree of Life deposit numbers (docs/04 H11).
+
+d_nw_heartwood_core = {
+	is_for_colonizable = yes
+	category = deposit_cat_rare
+	icon = d_nw_heartwood_core
+	potential = {
+		# <<VANILLA: restrict to the Arkship colony planet class, e.g. is_planet_class = pc_arkship (docs/04 H5)>>
+		has_planet_flag = nw_tree_ark
+	}
+	planet_modifier = {
+		pop_growth_speed = 0.15
+		planet_housing_add = 10
+		planet_jobs_society_research_produces_mult = 0.10   # <<VANILLA: confirm key>>
+		planet_jobs_biomass_produces_add = 5                 # <<VANILLA: confirm key>>
+	}
+	drop_weight = { weight = 0 }
+}
+
+# The Rootscar: the broken homeworld. One-time biomass pickup for Seedwings.
+d_nw_husk_of_the_grove = {
+	is_for_colonizable = no
+	category = deposit_cat_rare
+	icon = d_nw_husk
+	resources = {
+		category = planet_deposits
+		produces = { biomass = 2 }   # <<VANILLA: confirm biomass is a valid deposit resource>>
+	}
+	potential = { is_planet_class = pc_shattered }
+	drop_weight = { weight = 0 }
+}
+
+# Dormant sapling, placed in the Rootscar by the initializer. Collected by nw_uprooted.30.
+d_nw_dormant_sapling = {
+	is_for_colonizable = no
+	category = deposit_cat_rare
+	icon = d_nw_dormant_sapling
+	potential = { is_planet_class = pc_shattered }
+	drop_weight = { weight = 0 }
+}

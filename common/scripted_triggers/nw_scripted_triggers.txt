@@ -1,0 +1,30 @@
+# Identity triggers for the mod. Everything else in the mod gates on these,
+# so a Plan B switch (docs/04 H2) only touches this file.
+
+nw_is_uprooted_empire = {
+	OR = {
+		has_origin = origin_nw_uprooted
+		has_country_flag = nw_uprooted
+	}
+}
+
+# True for a colony that lives on one of our Tree Arks.
+nw_is_tree_ark_colony = {
+	exists = owner
+	owner = { nw_is_uprooted_empire = yes }
+	# <<VANILLA: replace with the real Arkship colony test, e.g. is_planet_class = pc_arkship
+	#   or the scripted trigger vanilla uses for Arkship colonies (docs/04 H3, H5)>>
+	has_planet_flag = nw_tree_ark
+}
+
+nw_ark_has_heartwood = {
+	has_deposit = d_nw_heartwood_core
+}
+
+nw_ark_is_withered = {
+	has_modifier = nw_withered_heartwood
+}
+
+nw_ark_is_elder = {
+	has_planet_flag = nw_ark_tier_3
+}

@@ -1,0 +1,1 @@
+Mesh files (`*.mesh`) and textures (`*.dds`) go here. See `docs/03-arkship-models.md` for the brief and `nw_tree_arkships.asset` for the expected file names. Fourteen meshes total: Seed, nine Tree Arks, three Rootholds, two Seedwings.

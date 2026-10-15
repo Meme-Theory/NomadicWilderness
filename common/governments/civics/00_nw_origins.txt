@@ -1,0 +1,53 @@
+# Nomadic Wilderness: The Uprooted
+# Origin definition. Fields marked <<VANILLA>> must be copied from origin_voidfarers
+# in vanilla common/governments/civics/00_origins.txt (see docs/04-vanilla-hooks.md H1).
+
+origin_nw_uprooted = {
+	is_origin = yes
+	icon = "gfx/interface/icons/origins/origins_nw_uprooted.dds"
+	picture = GFX_origin_nw_uprooted
+
+	playable = {
+		host_has_dlc = "Nomads"
+		host_has_dlc = "BioGenesis"
+	}
+
+	possible = {
+		authority = { value = auth_hive_mind }
+		civics = {
+			NOT = { value = civic_hive_devouring_swarm }
+			NOT = { value = civic_hive_terravore }
+		}
+	}
+
+	# --- Nomadic empire fields -------------------------------------------------
+	# <<VANILLA: paste every field that origin_voidfarers has and origin_default
+	#   lacks. Expected to include the nomadic marker, the starting Arkship
+	#   selection, and the starting-ship overrides (Logistic Ship instead of
+	#   Construction Ship). Keep them verbatim, then apply the three edits below.>>
+	#   Edit 1: starting Arkship class -> arkship_nw_heartwood_1 (swapped by event nw_uprooted.2)
+	#   Edit 2: starting construction ship -> nw_seedwing
+	#   Edit 3: starting science ship -> nw_seedwing_scout
+	# ---------------------------------------------------------------------------
+
+	# No starting_colony: the empire has no homeworld. The initializer places the Rootscar and the Ark.
+	initializers = { nw_uprooted_home_system }
+
+	flags = {
+		nw_uprooted
+		custom_start_screen
+	}
+
+	modifier = {
+		# The whole empire is one organism that remembers its tree.
+		country_unity_produces_mult = 0.05
+		planet_jobs_biomass_produces_mult = 0.10   # <<VANILLA: confirm biomass modifier name>>
+	}
+
+	random_weight = {
+		base = 0   # kept out of random-empire generation until the AI is tuned (docs/02 §12)
+	}
+
+	has_secondary_species = no
+	advanced_start = no
+}

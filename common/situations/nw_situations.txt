@@ -1,0 +1,92 @@
+# Nurture situation: grows an Ark one tier. Started by the Nurture decision/button
+# (docs/02 §3.3). Written to the 3.4+ situation format; confirm against a 4.4 vanilla situation (docs/04 H18).
+
+situation_nw_nurture_ark = {
+	picture = GFX_evt_nw_seed
+	category = positive
+	start_value = 0
+	stages = {
+		nw_nurture_stage_1 = { icon = GFX_situation_stage_1 end = 50 }
+		nw_nurture_stage_2 = { icon = GFX_situation_stage_2 end = 100 }
+	}
+	on_start = {
+		set_situation_flag = nw_nurture_started
+	}
+	on_progress_complete = {
+		target = {
+			# Tier swap happens through the megastructure upgrade effect; see docs/04 H4.
+			custom_tooltip = nw_nurture_complete_tt
+			owner = { country_event = { id = nw_uprooted.50 } }
+		}
+	}
+	on_abort = { }
+	monthly_progress = {
+		base = 1
+		modifier = {
+			factor = 1.5
+			desc = nw_docked_at_roothold
+			target = { has_planet_flag = nw_docked_at_roothold }   # <<VANILLA: replace with a "in a system with our Waystation" trigger>>
+		}
+		modifier = {
+			factor = 2
+			desc = nw_near_living_world
+			target = {
+				solar_system = {
+					any_system_planet = {
+						OR = {
+							is_planet_class = pc_gaia
+							has_deposit = d_nw_heartwood_core
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			desc = nw_biomass_starved
+			owner = { has_resource = { type = biomass amount < 0 } }   # <<VANILLA: confirm biomass stockpile can go negative; else amount < 15>>
+		}
+	}
+	approach = {
+		name = nw_nurture_slow_growth
+		icon = GFX_situation_approach_default
+		default = yes
+		on_select = { }
+		monthly_progress = { base = 0 }
+		# Drain is implemented by the monthly effect below.
+	}
+	approach = {
+		name = nw_nurture_forced_bloom
+		icon = GFX_situation_approach_aggressive
+		on_select = {
+			target = { add_modifier = { modifier = nw_nurture_forced_bloom } }
+		}
+		on_deselect = {
+			target = { remove_modifier = nw_nurture_forced_bloom }
+		}
+		monthly_progress = { base = 1 }
+	}
+	approach = {
+		name = nw_nurture_deep_dormancy
+		icon = GFX_situation_approach_passive
+		on_select = {
+			target = { add_modifier = { modifier = nw_nurture_dormancy } }
+		}
+		on_deselect = {
+			target = { remove_modifier = nw_nurture_dormancy }
+		}
+		monthly_progress = { base = -1 }   # nets to zero with base 1
+	}
+	on_monthly = {
+		effect = {
+			if = {
+				limit = { is_using_situation_approach = nw_nurture_slow_growth }
+				owner = { add_resource = { biomass = -15 } }
+			}
+			else_if = {
+				limit = { is_using_situation_approach = nw_nurture_forced_bloom }
+				owner = { add_resource = { biomass = -45 } }
+			}
+		}
+	}
+}

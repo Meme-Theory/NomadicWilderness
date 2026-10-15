@@ -1,0 +1,74 @@
+# Home system for the Uprooted: a star, the Rootscar (Shattered World) with its two deposits,
+# some rocky bodies to seed the first Roothold on, and the starting Ark.
+# The Ark itself is spawned by whatever vanilla origin_voidfarers uses (docs/04 H1/H16);
+# the hook below is a placeholder for that effect.
+
+nw_uprooted_home_system = {
+	name = "NAME_nw_rootscar_system"
+	class = "sc_g"
+	flags = { nw_rootscar_system }
+	usage = empire_init
+	max_instances = 1
+
+	planet = {
+		count = 1
+		class = star
+		orbit_distance = 0
+		orbit_angle = 1
+		size = { min = 20 max = 30 }
+		has_ring = no
+	}
+
+	change_orbit = 45
+	planet = {
+		name = "NAME_nw_rootscar"
+		class = "pc_shattered"
+		orbit_distance = 45
+		size = 18
+		init_effect = {
+			set_planet_flag = nw_rootscar
+			add_deposit = d_nw_husk_of_the_grove
+			add_deposit = d_nw_dormant_sapling
+			# The Rootscar keeps a thin ring of debris: the old crust.
+		}
+		moon = {
+			class = "pc_barren"
+			size = 8
+			orbit_distance = 8
+		}
+	}
+
+	change_orbit = 30
+	planet = {
+		class = "pc_asteroid"
+		orbit_distance = 30
+		size = 3
+	}
+	planet = {
+		class = "pc_asteroid"
+		orbit_distance = 0
+		orbit_angle = 60
+		size = 2
+	}
+
+	change_orbit = 35
+	planet = {
+		class = "pc_gas_giant"
+		orbit_distance = 35
+		size = 25
+		moon = {
+			class = "pc_frozen"
+			size = 10
+			orbit_distance = 10
+		}
+	}
+
+	init_effect = {
+		# <<VANILLA: paste the starting-Arkship spawn from the Voidfarers initializer here,
+		#   with the Arkship key swapped to arkship_nw_heartwood_1 (docs/04 H1).>>
+		random_system_planet = {
+			limit = { has_planet_flag = nw_rootscar }
+			save_global_event_target_as = nw_rootscar_planet
+		}
+	}
+}
